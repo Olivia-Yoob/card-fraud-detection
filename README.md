@@ -2,7 +2,7 @@
 
 > **A card-fraud model whose alert threshold is set by what errors cost the business, with segment-level error analysis, drift monitoring, and the governance documents a regulated deployment needs.**
 
-![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Status](https://img.shields.io/badge/status-active-orange)
+![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Status](https://img.shields.io/badge/status-active-green)
 
 ---
 
