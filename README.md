@@ -1,8 +1,20 @@
 # Fraud Detection with AI Risk Governance Framework
 
-> **An end-to-end fraud detection ML system integrated with enterprise-grade AI governance — featuring a Model Card, EU AI Act mapping, NIST AI RMF application, cost-sensitive thresholding, a fairness audit, and statistical drift monitoring.**
+> **A card-fraud model whose alert threshold is set by what errors cost the business, with segment-level error analysis, drift monitoring, and the governance documents a regulated deployment needs.**
 
 ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Status](https://img.shields.io/badge/status-active-orange)
+
+---
+
+## TL;DR
+
+| | |
+|---|---|
+| **Question** | Where should the alert threshold sit when a missed fraud costs $200 and a false alarm costs $5? |
+| **Answer** | XGBoost at threshold **0.06**, not the default 0.5 |
+| **Result** | Caught **88 of 98** frauds in the test set (recall 0.898, PR-AUC 0.866) at the cost of 135 false alarms |
+| **Open risk** | Recall drops to **~0.50 on $500+ transactions**, where each miss is most expensive. Logged with a mitigation plan before deployment |
+| **Monitoring** | PSI drift checks plus 95% / 99% control limits on a 24-month rolling baseline |
 
 ---
 
@@ -38,14 +50,14 @@ fraud-detection-ai-governance/
 │   ├── 01_EDA.ipynb              # Exploratory analysis: imbalance, Amount, Time, correlations
 │   ├── 02_Preprocessing.ipynb    # Stratified split + leakage-free scaling
 │   ├── 03_Modeling.ipynb         # LogReg → RF → XGBoost; threshold tuning; cost analysis
-│   ├── 04_Evaluation.ipynb       # PR/ROC, confusion, fairness audit, error analysis
+│   ├── 04_Evaluation.ipynb       # PR/ROC, confusion, segment performance, error analysis
 │   └── 05_AI_Governance.ipynb    # Model card, SHAP, drift, EU AI Act, NIST AI RMF
 │
 ├── src/
 │   ├── data_loader.py            # Raw / processed data loading
 │   ├── feature_engineering.py    # Stratified split + StandardScaler (leakage-free)
 │   ├── models.py                 # Model builders, evaluation, cost-based threshold tuning
-│   └── governance_metrics.py     # PSI, 24-month control limits, segment (fairness) report
+│   └── governance_metrics.py     # PSI, 24-month control limits, segment report
 │
 ├── docs/                         # ⭐ Core governance documentation
 │   ├── MODEL_CARD.md             # Google-style model card
@@ -95,7 +107,7 @@ fraud-detection-ai-governance/
 ### Phase 3 — Evaluation Beyond Accuracy ([04](notebooks/04_Evaluation.ipynb))
 - PR-curve vs ROC-curve; confusion matrix at the operating threshold.
 - **Cost-sensitive analysis:** missed fraud (FN) vs blocked legit purchase (FP), with the threshold optimized against a business cost function.
-- **Fairness audit:** performance sliced across **Amount ranges** and **time-of-day**.
+- **Segment performance:** recall and precision sliced by **transaction amount** and **time of day**.
 - **Error analysis:** characterizing the fraud the model misses.
 
 ### Phase 4 — AI Governance ⭐ ([05](notebooks/05_AI_Governance.ipynb))
@@ -127,11 +139,13 @@ fraud-detection-ai-governance/
 
 > The threshold is pushed below 0.5 because a missed fraud ($200) is assumed far costlier than a false alarm ($5) — a **business risk-appetite decision**, documented and reviewable, not a technical default.
 
-**⚠️ Fairness finding:** recall is 0.90–1.00 for transactions under $500 but drops to **~0.50 on the $500+ segment** — the highest-value (costliest) frauds are detected least reliably. Logged as an open risk ([AI_RISK_FRAMEWORK.md](docs/AI_RISK_FRAMEWORK.md), R6) with a mitigation before deployment.
+**⚠️ Segment finding:** recall is 0.90–1.00 for transactions under $500 but drops to **~0.50 on the $500+ segment** — the highest-value (costliest) frauds are detected least reliably. Logged as an open risk ([AI_RISK_FRAMEWORK.md](docs/AI_RISK_FRAMEWORK.md), R6) with a mitigation before deployment.
 
 | Confusion matrix | PR / ROC curves | Cost vs threshold | Drift dashboard |
 |---|---|---|---|
 | ![cm](results/confusion_matrix.png) | ![pr](results/pr_curve.png) | ![cost](results/cost_curve.png) | ![drift](results/drift_dashboard.png) |
+
+**Limitations:** the dataset is 2013 European card data with PCA-anonymized features, so feature-level business interpretation is limited, and costs of $200 / $5 are assumptions to be replaced with an issuer's actual loss and review costs.
 
 ---
 
@@ -183,7 +197,7 @@ This project uses AI coding assistants for code generation, with outputs validat
 ## 📬 Contact
 
 **Olivia Kim (Yoobin Kim)**
-- LinkedIn: [linkedin.com/in/enthusiasticyoob1998](https://www.linkedin.com/in/enthusiasticyoob1998/)
+- LinkedIn: [linkedin.com/in/olivia-yoobin-kim/](https://www.linkedin.com/in/olivia-yoobin-kim/)
 - GitHub: [@Olivia-Yoob](https://github.com/Olivia-Yoob)
 - Email: yoobink@andrew.cmu.edu
 
@@ -193,4 +207,4 @@ MIT License — see [LICENSE](LICENSE).
 
 ---
 
-**Project Status:** 🚧 Active development (started June 2026) · Target completion: August 2026
+**Project Status:** Completed June 2026
