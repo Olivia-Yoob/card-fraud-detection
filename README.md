@@ -44,7 +44,7 @@ This project demonstrates how a fraud-detection ML model can be developed **and 
 ## 🏗️ Project Structure
 
 ```
-fraud-detection-ai-governance/
+card-fraud-detection/
 │
 ├── notebooks/
 │   ├── 01_EDA.ipynb              # Exploratory analysis: imbalance, Amount, Time, correlations
@@ -171,8 +171,8 @@ fraud-detection-ai-governance/
 
 ```bash
 # Clone
-git clone https://github.com/Olivia-Yoob/fraud-detection-ai-governance.git
-cd fraud-detection-ai-governance
+git clone https://github.com/Olivia-Yoob/card-fraud-detection.git
+cd card-fraud-detection
 
 # Environment
 python3 -m venv venv
